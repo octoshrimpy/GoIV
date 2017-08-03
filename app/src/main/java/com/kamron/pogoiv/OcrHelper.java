@@ -85,9 +85,10 @@ public class OcrHelper {
     }
 
     private boolean isCandyWordFirst() {
-        //Check if language makes the pokemon name in candy second; France/Spain/Italy have Bonbon/Caramelos pokeName.
+        //Check if language makes the pokemon name in candy second; France/Spain/Italy/Portuguese 
+        //have Bonbon/Caramelos/Doces pokeName.
         String language = Locale.getDefault().getLanguage();
-        HashSet<String> specialCandyOrderLangs = new HashSet<>(Arrays.asList("fr", "es", "it"));
+        HashSet<String> specialCandyOrderLangs = new HashSet<>(Arrays.asList("fr", "es", "it", "pt"));
         return specialCandyOrderLangs.contains(language);
     }
 
@@ -199,7 +200,12 @@ public class OcrHelper {
             }
 
             d++;
+            if (pokemonImage.getWidth() <= x + d) { //if the level indicator is on white background, we need to break it
+                // before it loops off screen. Happens very rarely.
+                break;
+            }
         }
+        return d;
     }
 
     /**
@@ -546,6 +552,7 @@ public class OcrHelper {
          */
         if (cpText.length() >= 2) { //gastly can block the "cp" text, so its not visible...
             cpText = cpText.substring(2); //remove "cp".
+            cpText = cpText.replaceAll("[^0-9]]", ""); //remove any non integer character
         }
 
         try {
@@ -616,7 +623,13 @@ public class OcrHelper {
      * @param trainerLevel Current level of the trainer
      * @return an object
      */
-    public ScanResult scanPokemon(Bitmap pokemonImage, int trainerLevel, boolean s8patch) {
+    public ScanResult scanPokemon(Bitmap pokemonImage, int trainerLevel) {
+        boolean s8patch = false;
+        double screenRatio = (double) pokemonImage.getHeight() / (double) pokemonImage.getWidth();
+        if (screenRatio > 1.9 && screenRatio < 2.06) {
+            s8patch = true;
+        }
+
         double estimatedPokemonLevel = getPokemonLevelFromImg(pokemonImage, trainerLevel);
         String pokemonName;
         String pokemonType;

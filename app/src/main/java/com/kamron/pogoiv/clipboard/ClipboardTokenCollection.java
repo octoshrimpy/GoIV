@@ -2,6 +2,7 @@ package com.kamron.pogoiv.clipboard;
 
 import com.kamron.pogoiv.clipboard.tokens.BaseStatToken;
 import com.kamron.pogoiv.clipboard.tokens.CPMaxToken;
+import com.kamron.pogoiv.clipboard.tokens.CPMissingAtFourty;
 import com.kamron.pogoiv.clipboard.tokens.CpPercentileToken;
 import com.kamron.pogoiv.clipboard.tokens.CpTierToken;
 import com.kamron.pogoiv.clipboard.tokens.ExtendedCpTierToken;
@@ -12,6 +13,7 @@ import com.kamron.pogoiv.clipboard.tokens.IVPercentageTokenMode;
 import com.kamron.pogoiv.clipboard.tokens.IVSum;
 import com.kamron.pogoiv.clipboard.tokens.LevelToken;
 import com.kamron.pogoiv.clipboard.tokens.LevelUnicodeToken;
+import com.kamron.pogoiv.clipboard.tokens.WorthTrainingToken;
 import com.kamron.pogoiv.clipboard.tokens.PerfectionCPPercentageToken;
 import com.kamron.pogoiv.clipboard.tokens.PokemonNameToken;
 import com.kamron.pogoiv.clipboard.tokens.PowerupsToMaxToken;
@@ -61,8 +63,16 @@ public class ClipboardTokenCollection {
         tokens.add(new HpToken(false, true)); // hp on current evolution, current level
         tokens.add(new HpToken(false, false)); //hp on current evolution, level 40
 
-        tokens.add(new CPMaxToken(true)); //CP on max evolution, level 40
-        tokens.add(new CPMaxToken(false)); //CP on current evolution, level 40
+        tokens.add(new CPMaxToken(true, true)); ///cp on max evolution, current level
+        tokens.add(new CPMaxToken(true, false)); //cp on max evolution, level 40
+        tokens.add(new CPMaxToken(false, true)); // cp on current evolution, current level
+        tokens.add(new CPMaxToken(false, false)); //cp on current evolution, level 40
+
+
+        tokens.add(new CPMissingAtFourty(true)); // cp missing on level 40 compared to perfect iv
+        tokens.add(new CPMissingAtFourty(false)); // cp missing on level 40 compared to perfect iv
+
+
         //stat tokens
         tokens.add(new BaseStatToken(false, 0, false)); //base evolution, all stats, dont invlude iv
         tokens.add(new BaseStatToken(false, 0, true)); //base evolution, all stats,  invlude iv
@@ -76,6 +86,8 @@ public class ClipboardTokenCollection {
         tokens.add(new CpTierToken(false)); //pokemon max level cp tier
         tokens.add(new ExtendedCpTierToken(false)); // Max AA-ZZ cp tier
         tokens.add(new ExtendedCpTierToken(true)); // Same as above, max evolution
+        tokens.add(new WorthTrainingToken(false, true)); // Max 00-99 stat evaluation
+        tokens.add(new WorthTrainingToken(true, true)); // As above, max evolution
 
         tokens.add(new CpPercentileToken(false));
 
